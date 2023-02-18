@@ -56,6 +56,22 @@ public class ContractServiceImpl {
         return null;
     }
 
+    public List<Contract> getTimeHistoryByStartDate(Date start, Date end) {
+        if(start != null && end != null) {
+            return contractRepo.getTimeHistoryStart(start, end);
+        }
+
+        return null;
+    }
+
+    public List<Contract> getTimeHistoryByEndDate(Date start, Date end) {
+        if(start != null && end != null) {
+            return contractRepo.getTimeHistoryStart(start, end);
+        }
+
+        return null;
+    }
+
     public CarPreferences addPreference(CarPreferences carPreferences) {
         return preferencesRepo.save(carPreferences);
     }

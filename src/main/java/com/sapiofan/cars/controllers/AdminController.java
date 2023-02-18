@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 @RestController("/admin")
@@ -32,6 +33,16 @@ public class AdminController {
     @GetMapping("/getHistoryOfCar")
     public List<Contract> contractsOfCar(Long id) {
         return contractService.getCarHistory(carsService.getCar(id));
+    }
+
+    @GetMapping("/getTimeHistoryStart")
+    public List<Contract> contractsTimeHistoryByStartDate(Date start, Date end) {
+        return contractService.getTimeHistoryByStartDate(start, end);
+    }
+
+    @GetMapping("/getTimeHistoryEnd")
+    public List<Contract> contractsTimeHistoryByEndDate(Date start, Date end) {
+        return contractService.getTimeHistoryByEndDate(start, end);
     }
 
     @PostMapping("/addCarParams")
@@ -74,7 +85,7 @@ public class AdminController {
     public void setForfeit(@RequestParam("id") Long userId, @RequestParam("forfeit") Double forfeit,
                            HttpServletResponse response) {
         User user = userDetailsService.getUserById(userId);
-        if(user != null) {
+        if(user != null && forfeit >= 0) {
             user.setForfeit(forfeit);
             userDetailsService.save(user);
             response.setStatus(201);
