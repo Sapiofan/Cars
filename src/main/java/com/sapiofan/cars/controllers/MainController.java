@@ -45,7 +45,7 @@ public class MainController {
     }
 
     @PostMapping("/booking")
-    public void booking(@RequestParam("start_date") Date start, @RequestParam("start_date") Date end,
+    public void booking(@RequestParam("start_date") Date start, @RequestParam("end_date") Date end,
                         @RequestParam("preferences") Set<String> preferences, @RequestParam("car") Long carId,
                         @RequestParam("end_price") Double end_price, Authentication authentication,
                         HttpServletResponse response) {
@@ -62,7 +62,6 @@ public class MainController {
 
         response.setStatus(201);
     }
-
 
     @PostMapping(value = "/registration")
     public void registration(@RequestParam("phone") String phone,
