@@ -53,6 +53,12 @@ public class MainController {
                         HttpServletResponse response) {
         Contract contract = contractService.createContract(start, end, preferences, carsService.getCar(carId), end_price,
                 userDetailsService.getUserByPhone(authentication.getName()));
+
+        if(contract == null) {
+            response.setStatus(422);
+            return;
+        }
+        response.setStatus(201);
     }
 
 
@@ -83,7 +89,6 @@ public class MainController {
 
     @GetMapping(value = "/isLoggedIn")
     public boolean userIsLoggedIn() {
-        log.warn(SecurityContextHolder.getContext().getAuthentication() + "");
         log.warn(SecurityContextHolder.getContext().getAuthentication().getName() + "");
         return SecurityContextHolder.getContext().getAuthentication() != null
                 && !SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser");
@@ -96,7 +101,7 @@ public class MainController {
 
     @GetMapping("/user")
     public User getUser(Authentication authentication) {
-        if(authentication != null) {
+        if (authentication != null) {
             return userDetailsService.getUserByPhone(authentication.getName());
         }
         return null;
@@ -104,7 +109,7 @@ public class MainController {
 
     @GetMapping("/history")
     public List<Contract> getUserHistory(Authentication authentication) {
-        if(authentication != null) {
+        if (authentication != null) {
             return contractService.getContractsOfUser(userDetailsService.getUserByPhone(authentication.getName()));
         }
 

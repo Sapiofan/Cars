@@ -17,7 +17,6 @@ public class DatabaseData {
     @Autowired
     private ContractServiceImpl contractService;
 
-//    @EventListener(ApplicationReadyEvent.class)
     @Bean
     public void fillDatabase() {
         carsService.add(new Car("7 Series", "BMV", "sedan", 2023,

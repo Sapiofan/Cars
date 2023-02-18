@@ -20,7 +20,7 @@ public class CarsServiceImpl {
 
     public Car getCar(Long id) {
         Optional<Car> car = carRepo.findById(id);
-        if(car.isEmpty()) {
+        if (car.isEmpty()) {
             return null;
         }
         return car.get();

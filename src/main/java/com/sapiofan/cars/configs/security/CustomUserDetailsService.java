@@ -71,7 +71,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (user == null) {
             log.warn("Wrong phone was inputted: " + phone);
-            return "Email was wrong";
+            return "Phone was wrong";
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
