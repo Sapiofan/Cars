@@ -29,4 +29,13 @@ public class CarsServiceImpl {
     public Car add(Car car) {
         return carRepo.save(car);
     }
+
+    public boolean removeCar(Car car) {
+        if(car != null) {
+            carRepo.delete(car);
+            return true;
+        }
+
+        return false;
+    }
 }

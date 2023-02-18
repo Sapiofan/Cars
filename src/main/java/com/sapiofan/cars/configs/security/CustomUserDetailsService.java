@@ -17,8 +17,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -90,7 +94,47 @@ public class CustomUserDetailsService implements UserDetailsService {
         return "";
     }
 
+    @PostConstruct
+    public void createDefaultAdmin() {
+        User user = userRepository.findByPhone("38 055 555 55 51");
+
+        if (user != null) {
+            log.info("Admin has already exists");
+            return;
+        }
+
+        user = new User();
+        user.setPhone("38 055 555 55 51");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode("somePassword2");
+        user.setPassword(encodedPassword);
+        user.setRole(Role.ADMIN);
+        log.info("Admin was created");
+    }
+
     public User getUserByPhone(String phone) {
+        if(phone == null || phone.isEmpty()) {
+            return null;
+        }
         return userRepository.findByPhone(phone);
+    }
+
+    public User getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()) {
+            return null;
+        }
+        return user.get();
+    }
+
+    public User save(User user) {
+        if(user == null) {
+            return null;
+        }
+        return userRepository.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

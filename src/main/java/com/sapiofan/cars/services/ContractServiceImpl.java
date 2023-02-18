@@ -44,6 +44,18 @@ public class ContractServiceImpl {
         return contractRepo.save(new Contract(start, end, end_price, user, car, carPreferences));
     }
 
+    public List<Contract> getFullHistory() {
+        return contractRepo.findAll();
+    }
+
+    public List<Contract> getCarHistory(Car car) {
+        if(car != null) {
+            return contractRepo.getContractsByCar(car);
+        }
+
+        return null;
+    }
+
     public CarPreferences addPreference(CarPreferences carPreferences) {
         return preferencesRepo.save(carPreferences);
     }

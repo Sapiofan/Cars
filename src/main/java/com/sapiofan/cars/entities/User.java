@@ -33,6 +33,9 @@ public class User {
     private Integer rent_number = 0;
 
     @Column(nullable = false)
+    private Integer discount = 0;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -103,7 +106,20 @@ public class User {
     }
 
     public void setRent_number(Integer rent_number) {
+        if(rent_number >= 10 && rent_number < 20) {
+            discount = 5;
+        }
+        if(rent_number >= 20 && rent_number < 40) {
+            discount = 10;
+        }
+        if(rent_number >= 40) {
+            discount = 15;
+        }
         this.rent_number = rent_number;
+    }
+
+    public Integer getDiscount() {
+        return discount;
     }
 
     public Role getRole() {

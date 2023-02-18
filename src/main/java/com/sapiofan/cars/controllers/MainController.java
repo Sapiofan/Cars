@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class MainController {
 
     @Autowired
@@ -51,13 +49,17 @@ public class MainController {
                         @RequestParam("preferences") Set<String> preferences, @RequestParam("car") Long carId,
                         @RequestParam("end_price") Double end_price, Authentication authentication,
                         HttpServletResponse response) {
-        Contract contract = contractService.createContract(start, end, preferences, carsService.getCar(carId), end_price,
-                userDetailsService.getUserByPhone(authentication.getName()));
+        User user = userDetailsService.getUserByPhone(authentication.getName());
+        Contract contract = contractService.createContract(start, end, preferences,
+                carsService.getCar(carId), end_price, user);
 
         if(contract == null) {
             response.setStatus(422);
             return;
         }
+        user.setRent_number(user.getRent_number() + 1);
+        userDetailsService.save(user);
+
         response.setStatus(201);
     }
 
