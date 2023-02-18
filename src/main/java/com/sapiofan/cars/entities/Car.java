@@ -22,7 +22,7 @@ public class Car {
     private String type;
 
     @Column(nullable = false)
-    private String year;
+    private Integer year;
 
     @Column(nullable = false)
     private Integer price;
@@ -46,12 +46,35 @@ public class Car {
     private String fuel_type;
 
     @Column(nullable = false)
+    private Integer pledge;
+
+    @Column(nullable = false)
     private String image;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "car")
     private List<Contract> contracts = new ArrayList<>();
 
     public Car() {
+    }
+
+    public Car(String name, String brand, String type,
+               Integer year, Integer price, Integer speed,
+               Integer engine_speed, String gearbox, Byte seats,
+               Double fuel_consumption, String fuel_type,
+               Integer pledge, String image) {
+        this.name = name;
+        this.brand = brand;
+        this.type = type;
+        this.year = year;
+        this.price = price;
+        this.speed = speed;
+        this.engine_speed = engine_speed;
+        this.gearbox = gearbox;
+        this.seats = seats;
+        this.fuel_consumption = fuel_consumption;
+        this.fuel_type = fuel_type;
+        this.pledge = pledge;
+        this.image = image;
     }
 
     public Long getId() {
@@ -78,11 +101,11 @@ public class Car {
         this.brand = brand;
     }
 
-    public String getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
@@ -156,6 +179,14 @@ public class Car {
 
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
+    }
+
+    public Integer getPledge() {
+        return pledge;
+    }
+
+    public void setPledge(Integer pledge) {
+        this.pledge = pledge;
     }
 
     public String getImage() {

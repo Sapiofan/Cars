@@ -3,6 +3,9 @@ package com.sapiofan.cars.entities;
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "contracts")
@@ -26,7 +29,24 @@ public class Contract {
     @ManyToOne(fetch = FetchType.EAGER)
     private Car car;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "preference_list",
+            joinColumns = @JoinColumn(name = "contract_id"),
+            inverseJoinColumns = @JoinColumn(name = "preference_id")
+    )
+    private Set<CarPreferences> preferences = new HashSet<>();
+
     public Contract() {
+    }
+
+    public Contract(Date start_rent, Date end_rent, Double end_price, User user, Car car, Set<CarPreferences> preferences) {
+        this.start_rent = start_rent;
+        this.end_rent = end_rent;
+        this.end_price = end_price;
+        this.user = user;
+        this.car = car;
+        this.preferences = preferences;
     }
 
     public Long getId() {
@@ -75,5 +95,13 @@ public class Contract {
 
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    public Set<CarPreferences> getPreferences() {
+        return preferences;
+    }
+
+    public void setPreferences(Set<CarPreferences> preferences) {
+        this.preferences = preferences;
     }
 }
