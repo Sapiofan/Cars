@@ -47,6 +47,22 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(user);
     }
 
+    public String signUpUser(User user) {
+        User userCopy = userRepository.findByPhone(user.getPhone());
+
+        if (userCopy != null) {
+            log.warn("User with such phone already exists" + user.getPhone());
+            return "User with such phone already exists";
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        return "";
+    }
+
     public String signUp(String phone, String password, String address, String name, String surname) {
         User user = userRepository.findByPhone(phone);
 

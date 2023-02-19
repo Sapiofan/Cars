@@ -81,6 +81,19 @@ public class MainController {
         login(phone, password, request);
     }
 
+    @PostMapping(value = "/registration")
+    public void registration(@ModelAttribute("user") User user, HttpServletRequest request, HttpServletResponse response) {
+
+        String result = userDetailsService.signUpUser(user);
+        if (!result.isEmpty()) {
+            response.setStatus(422);
+        } else {
+            response.setStatus(201);
+        }
+
+        login(user.getPhone(), user.getPassword(), request);
+    }
+
     @PostMapping("/login")
     public void login(@RequestParam("phone") String phone,
                       @RequestParam("password") String password,
@@ -100,7 +113,7 @@ public class MainController {
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 
-    @GetMapping("/user")
+    @GetMapping(value = "/user")
     public User getUser(Authentication authentication) {
         if (authentication != null) {
             return userDetailsService.getUserByPhone(authentication.getName());
