@@ -4,11 +4,13 @@ import com.sapiofan.cars.configs.security.CustomUserDetailsService;
 import com.sapiofan.cars.entities.Car;
 import com.sapiofan.cars.entities.Contract;
 import com.sapiofan.cars.entities.User;
+import com.sapiofan.cars.entities.ui.UserUI;
 import com.sapiofan.cars.services.CarsServiceImpl;
 import com.sapiofan.cars.services.ContractServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -78,12 +80,11 @@ public class MainController {
             response.setStatus(201);
         }
 
-        login(phone, password, request);
+//        login(phone, password, request);
     }
 
-    @PostMapping(value = "/registration")
-    public void registration(@ModelAttribute("user") User user, HttpServletRequest request, HttpServletResponse response) {
-
+    @PostMapping(value = "/registrationUser")
+    public void registration(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
         String result = userDetailsService.signUpUser(user);
         if (!result.isEmpty()) {
             response.setStatus(422);
@@ -91,7 +92,7 @@ public class MainController {
             response.setStatus(201);
         }
 
-        login(user.getPhone(), user.getPassword(), request);
+//        login(user.getPhone(), user.getPassword(), request);
     }
 
     @PostMapping("/login")
@@ -99,6 +100,11 @@ public class MainController {
                       @RequestParam("password") String password,
                       HttpServletRequest request) {
         userDetailsService.signIn(phone, password, request);
+    }
+
+    @PostMapping("/loginUser")
+    public void login(@RequestBody UserUI user, HttpServletRequest request) {
+        userDetailsService.signIn(user.getPhone(), user.getPassword(), request);
     }
 
     @GetMapping(value = "/isLoggedIn")
@@ -114,11 +120,16 @@ public class MainController {
     }
 
     @GetMapping(value = "/user")
-    public User getUser(Authentication authentication) {
+    public ResponseEntity<User> getUser(Authentication authentication) {
+        User user = null;
         if (authentication != null) {
-            return userDetailsService.getUserByPhone(authentication.getName());
+            user = userDetailsService.getUserByPhone(authentication.getName());
         }
-        return null;
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(user);
+        }
     }
 
     @GetMapping("/history")
