@@ -1,6 +1,6 @@
 package com.sapiofan.cars.controllers;
 
-import com.sapiofan.cars.configs.security.CustomUserDetailsService;
+
 import com.sapiofan.cars.entities.Car;
 import com.sapiofan.cars.entities.Contract;
 import com.sapiofan.cars.entities.User;
@@ -28,8 +28,8 @@ public class MainController {
     @Autowired
     private CarsServiceImpl carsService;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+//    @Autowired
+//    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private ContractServiceImpl contractService;
@@ -46,66 +46,66 @@ public class MainController {
         return carsService.getCar(id);
     }
 
-    @PostMapping("/booking")
-    public void booking(@RequestParam("start_date") Date start, @RequestParam("end_date") Date end,
-                        @RequestParam("preferences") Set<String> preferences, @RequestParam("car") Long carId,
-                        @RequestParam("end_price") Double end_price, Authentication authentication,
-                        HttpServletResponse response) {
-        User user = userDetailsService.getUserByPhone(authentication.getName());
-        Contract contract = contractService.createContract(start, end, preferences,
-                carsService.getCar(carId), end_price, user);
+//    @PostMapping("/booking")
+//    public void booking(@RequestParam("start_date") Date start, @RequestParam("end_date") Date end,
+//                        @RequestParam("preferences") Set<String> preferences, @RequestParam("car") Long carId,
+//                        @RequestParam("end_price") Double end_price, Authentication authentication,
+//                        HttpServletResponse response) {
+//        User user = userDetailsService.getUserByPhone(authentication.getName());
+//        Contract contract = contractService.createContract(start, end, preferences,
+//                carsService.getCar(carId), end_price, user);
+//
+//        if(contract == null) {
+//            response.setStatus(422);
+//            return;
+//        }
+//        user.setRent_number(user.getRent_number() + 1);
+//        userDetailsService.save(user);
+//
+//        response.setStatus(201);
+//    }
 
-        if(contract == null) {
-            response.setStatus(422);
-            return;
-        }
-        user.setRent_number(user.getRent_number() + 1);
-        userDetailsService.save(user);
-
-        response.setStatus(201);
-    }
-
-    @PostMapping(value = "/registration")
-    public void registration(@RequestParam("phone") String phone,
-                             @RequestParam("password") String password,
-                             @RequestParam("address") String address,
-                             @RequestParam("name") String name,
-                             @RequestParam("surname") String surname,
-                             HttpServletRequest request, HttpServletResponse response) {
-
-        String result = userDetailsService.signUp(phone, password, address, name, surname);
-        if (!result.isEmpty()) {
-            response.setStatus(422);
-        } else {
-            response.setStatus(201);
-        }
-
-//        login(phone, password, request);
-    }
-
-    @PostMapping(value = "/registrationUser")
-    public void registration(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
-        String result = userDetailsService.signUpUser(user);
-        if (!result.isEmpty()) {
-            response.setStatus(422);
-        } else {
-            response.setStatus(201);
-        }
-
-//        login(user.getPhone(), user.getPassword(), request);
-    }
-
-    @PostMapping("/login")
-    public void login(@RequestParam("phone") String phone,
-                      @RequestParam("password") String password,
-                      HttpServletRequest request) {
-        userDetailsService.signIn(phone, password, request);
-    }
-
-    @PostMapping("/loginUser")
-    public void login(@RequestBody UserUI user, HttpServletRequest request) {
-        userDetailsService.signIn(user.getPhone(), user.getPassword(), request);
-    }
+//    @PostMapping(value = "/registration")
+//    public void registration(@RequestParam("phone") String phone,
+//                             @RequestParam("password") String password,
+//                             @RequestParam("address") String address,
+//                             @RequestParam("name") String name,
+//                             @RequestParam("surname") String surname,
+//                             HttpServletRequest request, HttpServletResponse response) {
+//
+//        String result = userDetailsService.signUp(phone, password, address, name, surname);
+//        if (!result.isEmpty()) {
+//            response.setStatus(422);
+//        } else {
+//            response.setStatus(201);
+//        }
+//
+////        login(phone, password, request);
+//    }
+//
+//    @PostMapping(value = "/registrationUser")
+//    public void registration(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
+//        String result = userDetailsService.signUpUser(user);
+//        if (!result.isEmpty()) {
+//            response.setStatus(422);
+//        } else {
+//            response.setStatus(201);
+//        }
+//
+////        login(user.getPhone(), user.getPassword(), request);
+//    }
+//
+//    @PostMapping("/login")
+//    public void login(@RequestParam("phone") String phone,
+//                      @RequestParam("password") String password,
+//                      HttpServletRequest request) {
+//        userDetailsService.signIn(phone, password, request);
+//    }
+//
+//    @PostMapping("/loginUser")
+//    public void login(@RequestBody UserUI user, HttpServletRequest request) {
+//        userDetailsService.signIn(user.getPhone(), user.getPassword(), request);
+//    }
 
     @GetMapping(value = "/isLoggedIn")
     public boolean userIsLoggedIn() {
@@ -119,25 +119,25 @@ public class MainController {
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 
-    @GetMapping(value = "/user")
-    public ResponseEntity<User> getUser(Authentication authentication) {
-        User user = null;
-        if (authentication != null) {
-            user = userDetailsService.getUserByPhone(authentication.getName());
-        }
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(user);
-        }
-    }
+//    @GetMapping(value = "/user")
+//    public ResponseEntity<User> getUser(Authentication authentication) {
+//        User user = null;
+//        if (authentication != null) {
+//            user = userDetailsService.getUserByPhone(authentication.getName());
+//        }
+//        if (user == null) {
+//            return ResponseEntity.notFound().build();
+//        } else {
+//            return ResponseEntity.ok(user);
+//        }
+//    }
 
-    @GetMapping("/history")
-    public List<Contract> getUserHistory(Authentication authentication) {
-        if (authentication != null) {
-            return contractService.getContractsOfUser(userDetailsService.getUserByPhone(authentication.getName()));
-        }
-
-        return null;
-    }
+//    @GetMapping("/history")
+//    public List<Contract> getUserHistory(Authentication authentication) {
+//        if (authentication != null) {
+//            return contractService.getContractsOfUser(userDetailsService.getUserByPhone(authentication.getName()));
+//        }
+//
+//        return null;
+//    }
 }

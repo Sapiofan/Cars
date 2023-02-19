@@ -1,6 +1,6 @@
 package com.sapiofan.cars.controllers;
 
-import com.sapiofan.cars.configs.security.CustomUserDetailsService;
+
 import com.sapiofan.cars.entities.Car;
 import com.sapiofan.cars.entities.Contract;
 import com.sapiofan.cars.entities.User;
@@ -19,8 +19,8 @@ public class AdminController {
     @Autowired
     private CarsServiceImpl carsService;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+//    @Autowired
+//    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private ContractServiceImpl contractService;
@@ -76,21 +76,21 @@ public class AdminController {
         response.setStatus(201);
     }
 
-    @GetMapping("/getUsers")
-    public List<User> getUsers() {
-        return userDetailsService.getAllUsers();
-    }
-
-    @PostMapping("/setForfeit")
-    public void setForfeit(@RequestParam("id") Long userId, @RequestParam("forfeit") Double forfeit,
-                           HttpServletResponse response) {
-        User user = userDetailsService.getUserById(userId);
-        if(user != null && forfeit >= 0) {
-            user.setForfeit(forfeit);
-            userDetailsService.save(user);
-            response.setStatus(201);
-            return;
-        }
-        response.setStatus(422);
-    }
+//    @GetMapping("/getUsers")
+//    public List<User> getUsers() {
+//        return userDetailsService.getAllUsers();
+//    }
+//
+//    @PostMapping("/setForfeit")
+//    public void setForfeit(@RequestParam("id") Long userId, @RequestParam("forfeit") Double forfeit,
+//                           HttpServletResponse response) {
+//        User user = userDetailsService.getUserById(userId);
+//        if(user != null && forfeit >= 0) {
+//            user.setForfeit(forfeit);
+//            userDetailsService.save(user);
+//            response.setStatus(201);
+//            return;
+//        }
+//        response.setStatus(422);
+//    }
 }
