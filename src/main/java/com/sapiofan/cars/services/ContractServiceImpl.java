@@ -75,4 +75,8 @@ public class ContractServiceImpl {
     public CarPreferences addPreference(CarPreferences carPreferences) {
         return preferencesRepo.save(carPreferences);
     }
+
+    public Contract save(Contract contract) {
+        return contractRepo.save(contract);
+    }
 }

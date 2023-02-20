@@ -64,19 +64,37 @@ public class MainController {
         return carsService.getCar(id);
     }
 
+//    @PostMapping("/booking")
+//    public void booking(@RequestParam("start_date") Date start, @RequestParam("end_date") Date end,
+//                        @RequestParam("preferences") Set<String> preferences, @RequestParam("car") Long carId,
+//                        @RequestParam("end_price") Double end_price, Authentication authentication,
+//                        HttpServletResponse response) {
+//        User user = userDetailsService.getUserByPhone(authentication.getName());
+//        Contract contract = contractService.createContract(start, end, preferences,
+//                carsService.getCar(carId), end_price, user);
+//
+//        if(contract == null) {
+//            response.setStatus(422);
+//            return;
+//        }
+//        user.setRent_number(user.getRent_number() + 1);
+//        userDetailsService.save(user);
+//
+//        response.setStatus(201);
+//    }
+
     @PostMapping("/booking")
-    public void booking(@RequestParam("start_date") Date start, @RequestParam("end_date") Date end,
-                        @RequestParam("preferences") Set<String> preferences, @RequestParam("car") Long carId,
-                        @RequestParam("end_price") Double end_price, Authentication authentication,
+    public void booking(@RequestBody Contract contract, Authentication authentication,
                         HttpServletResponse response) {
         User user = userDetailsService.getUserByPhone(authentication.getName());
-        Contract contract = contractService.createContract(start, end, preferences,
-                carsService.getCar(carId), end_price, user);
 
         if(contract == null) {
             response.setStatus(422);
             return;
         }
+
+        contract.setUser(user);
+        contractService.save(contract);
         user.setRent_number(user.getRent_number() + 1);
         userDetailsService.save(user);
 
