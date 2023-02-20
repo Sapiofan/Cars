@@ -7,13 +7,14 @@ import com.sapiofan.cars.entities.User;
 import com.sapiofan.cars.services.CarsServiceImpl;
 import com.sapiofan.cars.services.ContractServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
-@RestController("/admin")
+@RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class AdminController {
     @Autowired
@@ -25,27 +26,28 @@ public class AdminController {
     @Autowired
     private ContractServiceImpl contractService;
 
-    @GetMapping("/getAllHistory")
+    @GetMapping("/admin/getAllHistory")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Contract> contracts() {
         return contractService.getFullHistory();
     }
 
-    @GetMapping("/getHistoryOfCar")
+    @GetMapping("/admin/getHistoryOfCar")
     public List<Contract> contractsOfCar(Long id) {
         return contractService.getCarHistory(carsService.getCar(id));
     }
 
-    @GetMapping("/getTimeHistoryStart")
+    @GetMapping("/admin/getTimeHistoryStart")
     public List<Contract> contractsTimeHistoryByStartDate(Date start, Date end) {
         return contractService.getTimeHistoryByStartDate(start, end);
     }
 
-    @GetMapping("/getTimeHistoryEnd")
+    @GetMapping("/admin/getTimeHistoryEnd")
     public List<Contract> contractsTimeHistoryByEndDate(Date start, Date end) {
         return contractService.getTimeHistoryByEndDate(start, end);
     }
 
-    @PostMapping("/addCarParams")
+    @PostMapping("/admin/addCarParams")
     public void addCarParams(@RequestParam("name") String name, @RequestParam("brand") String brand,
                              @RequestParam("type") String type, @RequestParam("year") Integer year,
                              @RequestParam("price") Integer price, @RequestParam("speed") Integer speed,
@@ -57,7 +59,7 @@ public class AdminController {
                 fuel_type, pledge, image), response);
     }
 
-    @PostMapping("/addCar")
+    @PostMapping("/admin/addCar")
     public void addCarObject(Car car, HttpServletResponse response) {
         Car newCar = carsService.add(car);
         if(newCar == null) {
@@ -67,7 +69,7 @@ public class AdminController {
         response.setStatus(201);
     }
 
-    @PostMapping("/removeCar")
+    @PostMapping("/admin/removeCar")
     public void removeCar(@RequestParam("id") Long cardId, HttpServletResponse response) {
         if(carsService.removeCar(carsService.getCar(cardId))) {
             response.setStatus(422);
@@ -76,12 +78,13 @@ public class AdminController {
         response.setStatus(201);
     }
 
-    @GetMapping("/getUsers")
+    @GetMapping("/admin/getUsers")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> getUsers() {
         return userDetailsService.getAllUsers();
     }
 
-    @PostMapping("/setForfeit")
+    @PostMapping("/admin/setForfeit")
     public void setForfeit(@RequestParam("id") Long userId, @RequestParam("forfeit") Double forfeit,
                            HttpServletResponse response) {
         User user = userDetailsService.getUserById(userId);
