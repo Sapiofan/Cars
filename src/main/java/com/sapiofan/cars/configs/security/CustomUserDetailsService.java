@@ -6,6 +6,7 @@ import com.sapiofan.cars.repos.UserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,20 +33,22 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepo userRepository;
 
+    @Lazy
     @Autowired
     AuthenticationManager authenticationManager;
 
     private static final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         User user = userRepository.findByPhone(phone);
-        if (user == null) {
-            log.error("User with such phone wasn't found: " + phone);
-            throw new UsernameNotFoundException("User not found");
+
+        if(user == null) {
+            throw new UsernameNotFoundException("User Not Found with username: " + phone);
         }
 
-        return new CustomUserDetails(user);
+        return CustomUserDetails.build(user);
     }
 
     public String signUpUser(User user) {
@@ -110,6 +114,22 @@ public class CustomUserDetailsService implements UserDetailsService {
         return "";
     }
 
+    public User login(String phone, String password) {
+        User user = userRepository.findByPhone(phone);
+
+        if (user == null) {
+            log.warn("Wrong phone was inputted: " + phone);
+            return null;
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return null;
+        }
+
+        return user;
+    }
+
     @PostConstruct
     public void createDefaultAdmin() {
         User user = userRepository.findByPhone("38 055 555 55 51");
@@ -132,6 +152,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(phone == null || phone.isEmpty()) {
             return null;
         }
+        log.warn(phone);
         return userRepository.findByPhone(phone);
     }
 
