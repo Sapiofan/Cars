@@ -145,6 +145,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode("somePassword2");
         user.setPassword(encodedPassword);
         user.setRole(Role.ADMIN);
+        user.setFirst_name("ADMIN");
+        user.setSurname("ADMIN");
+        user.setAddress("ADMIN");
+        userRepository.save(user);
         log.info("Admin was created");
     }
 
