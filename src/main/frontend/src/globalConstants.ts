@@ -1,1 +1,1 @@
-export const URL = 'http://localhost:8080'
+export const URL = 'https://cars-production-36ba.up.railway.app'
