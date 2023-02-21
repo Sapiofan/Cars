@@ -110,14 +110,16 @@ public class User {
     }
 
     public void setRent_number(Integer rent_number) {
-        if(rent_number >= 10 && rent_number < 20) {
-            discount = 5;
-        }
-        if(rent_number >= 20 && rent_number < 40) {
-            discount = 10;
-        }
-        if(rent_number >= 40) {
+        if (rent_number == 0) {
             discount = 15;
+        } else if (rent_number >= 10 && rent_number < 20) {
+            discount = 5;
+        } else if (rent_number >= 20 && rent_number < 40) {
+            discount = 10;
+        } else if (rent_number >= 40) {
+            discount = 15;
+        } else {
+            discount = 0;
         }
         this.rent_number = rent_number;
     }

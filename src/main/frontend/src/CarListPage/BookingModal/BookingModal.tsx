@@ -15,6 +15,24 @@ export const BookingModal = ({ onClose, car }: BookingModalProps) => {
     const [endDate, setEndDate] = useState()
     const [error, setError] = useState('')
     const [user, setUser] = useState<any>()
+    let time =
+        endDate && startDate
+            ? new Date(endDate).getTime() - new Date(startDate).getTime()
+            : 0
+
+    let days = time / (1000 * 3600 * 24) + 1
+
+    let daysDiscount = 0
+
+    if (days >= 3) {
+        daysDiscount = 5
+    }
+    if (days >= 7) {
+        daysDiscount = 10
+    }
+    if (days >= 28) {
+        daysDiscount = 15
+    }
 
     useEffect(() => {
         fetch(`${URL}/user`, {
@@ -82,6 +100,9 @@ export const BookingModal = ({ onClose, car }: BookingModalProps) => {
         }
     }
 
+    const finalPrice = car.price * days + checkedAmount
+
+    const allDiscount = (user?.discount || 0) + daysDiscount
     return (
         <div className={styles.background} onClick={onClose}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -125,25 +146,20 @@ export const BookingModal = ({ onClose, car }: BookingModalProps) => {
                     ))}
                 </div>
                 <p className={styles.pledge}>+ застава {car.pledge}₴</p>
-                {user?.discount && (
+                {allDiscount ? (
                     <p className={styles.discount}>
-                        Вам нарахована знижка у розмірі {user?.discount}%
+                        Вам нарахована знижка у розмірі {allDiscount}%
                     </p>
-                )}
-                {user?.discount && (
-                    <span className={styles.discountPrice}>
-                        {car.price + checkedAmount}₴
-                    </span>
-                )}
+                ) : null}
+                {allDiscount ? (
+                    <span className={styles.discountPrice}>{finalPrice}₴</span>
+                ) : null}
                 <p className={styles.price}>
                     Остаточна ціна
                     <span>
-                        {!user?.discount
-                            ? car.price + checkedAmount
-                            : car.price +
-                              checkedAmount -
-                              ((car.price + checkedAmount) / 100) *
-                                  user?.discount}
+                        {!allDiscount
+                            ? finalPrice
+                            : finalPrice - (finalPrice / 100) * allDiscount}
                         ₴
                     </span>
                 </p>
