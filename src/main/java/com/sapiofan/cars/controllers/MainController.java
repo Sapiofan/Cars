@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+//@CrossOrigin
 public class MainController {
 
     @Autowired
@@ -148,13 +149,16 @@ public class MainController {
 //    }
 
     @GetMapping(value = "/user")
-    public ResponseEntity<?> getUser(Authentication authentication) {
+    public ResponseEntity<?> getUser(Authentication authentication) throws IOException {
         if (authentication != null) {
             return ResponseEntity.ok(userDetailsService.getUserByPhone(authentication.getName()));
         }
 
         return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(),
-                HttpStatus.UNAUTHORIZED.value(), "user is not authorized"), HttpStatus.UNAUTHORIZED);
+                HttpStatus.UNAUTHORIZED.value(), "user is not authorized"), HttpStatus.valueOf(401));
+//        return ResponseEntity.ok(new ErrorResponse(LocalDateTime.now(),
+//                HttpStatus.UNAUTHORIZED.value(), "user is not authorized"));
+//        return null;
     }
 
     @GetMapping("/history")
