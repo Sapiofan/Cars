@@ -1,8 +1,11 @@
 package com.sapiofan.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cars")
@@ -51,6 +54,7 @@ public class Car {
     private String image;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "car")
+    @JsonIgnore
     private List<Contract> contracts = new ArrayList<>();
 
     public Car() {
@@ -194,5 +198,29 @@ public class Car {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void addContract(Contract contract) {
+        this.contracts.add(contract);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(id, car.id) && Objects.equals(name, car.name)
+                && Objects.equals(brand, car.brand) && Objects.equals(type, car.type) && Objects.equals(year, car.year)
+                && Objects.equals(price, car.price) && Objects.equals(speed, car.speed)
+                && Objects.equals(engine_speed, car.engine_speed) && Objects.equals(gearbox, car.gearbox)
+                && Objects.equals(seats, car.seats) && Objects.equals(fuel_consumption, car.fuel_consumption)
+                && Objects.equals(fuel_type, car.fuel_type) && Objects.equals(pledge, car.pledge)
+                && Objects.equals(image, car.image) && Objects.equals(contracts, car.contracts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, brand, type, year, price, speed, engine_speed,
+                gearbox, seats, fuel_consumption, fuel_type, pledge, image, contracts);
     }
 }

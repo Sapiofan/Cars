@@ -3,6 +3,7 @@ package com.sapiofan.cars.entities;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -85,6 +86,7 @@ public class Contract {
 
     public void setUser(User user) {
         this.user = user;
+        this.user.addContract(this);
     }
 
     public Car getCar() {
@@ -93,6 +95,7 @@ public class Contract {
 
     public void setCar(Car car) {
         this.car = car;
+        this.car.addContract(this);
     }
 
     public Set<CarPreferences> getPreferences() {
@@ -101,5 +104,21 @@ public class Contract {
 
     public void setPreferences(Set<CarPreferences> preferences) {
         this.preferences = preferences;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contract contract = (Contract) o;
+        return Objects.equals(id, contract.id) && Objects.equals(start_rent, contract.start_rent)
+                && Objects.equals(end_rent, contract.end_rent) && Objects.equals(end_price, contract.end_price)
+                && Objects.equals(user, contract.user) && Objects.equals(car, contract.car)
+                && Objects.equals(preferences, contract.preferences);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, start_rent, end_rent, end_price, user, car, preferences);
     }
 }
