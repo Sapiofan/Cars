@@ -162,11 +162,13 @@ public class MainController {
     }
 
     @GetMapping("/history")
-    public List<Contract> getUserHistory(Authentication authentication) {
+    public ResponseEntity<?> getUserHistory(Authentication authentication) {
         if (authentication != null) {
-            return contractService.getContractsOfUser(userDetailsService.getUserByPhone(authentication.getName()));
+            return ResponseEntity.ok(contractService
+                    .getContractsOfUser(userDetailsService.getUserByPhone(authentication.getName())));
         }
 
-        return null;
+        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(), "user is not authorized"), HttpStatus.valueOf(401));
     }
 }

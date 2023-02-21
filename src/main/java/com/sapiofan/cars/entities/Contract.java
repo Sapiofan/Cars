@@ -1,5 +1,7 @@
 package com.sapiofan.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,9 +15,11 @@ public class Contract {
     private Long id;
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date start_rent;
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date end_rent;
 
     @Column(nullable = false)
