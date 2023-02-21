@@ -7,12 +7,14 @@ import com.sapiofan.cars.configs.security.JwtUtils;
 import com.sapiofan.cars.entities.Car;
 import com.sapiofan.cars.entities.Contract;
 import com.sapiofan.cars.entities.User;
+import com.sapiofan.cars.entities.ui.ErrorResponse;
 import com.sapiofan.cars.entities.ui.UserUI;
 import com.sapiofan.cars.services.CarsServiceImpl;
 import com.sapiofan.cars.services.ContractServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -145,12 +148,13 @@ public class MainController {
 //    }
 
     @GetMapping(value = "/user")
-    public User getUser(Authentication authentication) {
+    public ResponseEntity<?> getUser(Authentication authentication) {
         if (authentication != null) {
-            return userDetailsService.getUserByPhone(authentication.getName());
+            return ResponseEntity.ok(userDetailsService.getUserByPhone(authentication.getName()));
         }
 
-        return null;
+        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(), "user is not authorized"), HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/history")
