@@ -1,8 +1,11 @@
 package com.sapiofan.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -40,6 +43,7 @@ public class User {
     private Role role;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
     private List<Contract> contracts = new ArrayList<>();
 
     public User() {
@@ -136,5 +140,27 @@ public class User {
 
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
+    }
+
+    public void addContract(Contract contract) {
+        this.contracts.add(contract);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(first_name, user.first_name)
+                && Objects.equals(surname, user.surname) && Objects.equals(address, user.address)
+                && Objects.equals(phone, user.phone) && Objects.equals(password, user.password)
+                && Objects.equals(forfeit, user.forfeit) && Objects.equals(rent_number, user.rent_number)
+                && Objects.equals(discount, user.discount) && role == user.role && Objects.equals(contracts, user.contracts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, first_name, surname, address, phone, password,
+                forfeit, rent_number, discount, role, contracts);
     }
 }

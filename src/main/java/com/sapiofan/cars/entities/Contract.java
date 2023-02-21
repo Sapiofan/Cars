@@ -85,6 +85,7 @@ public class Contract {
 
     public void setUser(User user) {
         this.user = user;
+        this.user.addContract(this);
     }
 
     public Car getCar() {
@@ -93,6 +94,7 @@ public class Contract {
 
     public void setCar(Car car) {
         this.car = car;
+        this.car.addContract(this);
     }
 
     public Set<CarPreferences> getPreferences() {
