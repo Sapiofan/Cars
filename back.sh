@@ -1,3 +1,3 @@
 #!/bin/bash
-mvn clean install
+mvn install
 java -jar target/cars.jar
