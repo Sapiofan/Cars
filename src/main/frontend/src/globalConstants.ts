@@ -1,1 +1,0 @@
-export const URL = 'https://cars-production-36ba.up.railway.app'
