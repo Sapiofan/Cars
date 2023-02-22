@@ -20,10 +20,10 @@ public class DatabaseData {
         if (carsService.getAllCars().size() == 0) {
             carsService.add(new Car("7 Series", "BMV", "седан", 2023,
                     25000, 350, 9400, "автомат", (byte) 4, 3.9, "бензин",
-                    1500, "https://thumbor.forbes.com/thumbor/fit-in/960x600/https://www.forbes.com/wheels/wp-content/uploads/2022/09/2023_Mercedes-Benz_Sclass_Gallery1.jpg"));
+                    15000, "https://thumbor.forbes.com/thumbor/fit-in/960x600/https://www.forbes.com/wheels/wp-content/uploads/2022/09/2023_Mercedes-Benz_Sclass_Gallery1.jpg"));
             carsService.add(new Car("S-Class", "Mercedes-Benz", "седан", 2023, 4000,
                     390, 9900, "автомат", (byte) 4, 3.2, "бензин",
-                    1500, "https://thumbor.forbes.com/thumbor/fit-in/960x600/https://www.forbes.com/wheels/wp-content/uploads/2022/07/2023_BMW_7_Series_Gallery1.jpg"));
+                    15000, "https://thumbor.forbes.com/thumbor/fit-in/960x600/https://www.forbes.com/wheels/wp-content/uploads/2022/07/2023_BMW_7_Series_Gallery1.jpg"));
             carsService.add(new Car("G-90", "Genesis", "седан", 2023, 3000, 370,
                     8900, "механіка", (byte) 4, 3.9, "бензин",
                     15000, "https://thumbor.forbes.com/thumbor/fit-in/960x600/https://www.forbes.com/wheels/wp-content/uploads/2022/08/2023_Genesis_G90_Gallery1.jpg"));
